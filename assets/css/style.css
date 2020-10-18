@@ -55,11 +55,11 @@ body {
 
 .body {
   min-height: calc(100vh - 128px - 48px);
-  margin: auto;
   margin-bottom: 48px;
 }
 
 .main-content {
+  margin: auto;
   max-width: 960px;
   padding: 24px;
   margin-bottom: 48px;
