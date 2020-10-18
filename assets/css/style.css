@@ -51,6 +51,8 @@ body {
 
 .project-tagline {
   margin: 0;
+  opacity: 0.7;
+  font-weight: normal;
 }
 
 .body {
