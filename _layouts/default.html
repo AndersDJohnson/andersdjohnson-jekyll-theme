@@ -2,6 +2,19 @@
 <html lang="en-US">
   <html lang="{{ site.lang | default: "en-US" }}">
   <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#157878" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>
+      {{ page.title | default: site.title | default: site.github.repository_name
+      }}
+    </title>
+
     {% if site.google_analytics %}
     <script
       async
@@ -16,14 +29,7 @@
       gtag("config", "{{ site.google_analytics }}");
     </script>
     {% endif %}
-    <meta charset="UTF-8" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#157878" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
