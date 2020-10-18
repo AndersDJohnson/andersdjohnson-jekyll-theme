@@ -55,6 +55,16 @@ body {
   font-weight: normal;
 }
 
+@media (max-width: 575px) {
+  .project-name {
+    font-size: 1.5em;
+  }
+
+  .project-tagline {
+    font-size: 1em;
+  }
+}
+
 .body {
   min-height: calc(100vh - 128px - 48px);
   margin-bottom: 48px;
