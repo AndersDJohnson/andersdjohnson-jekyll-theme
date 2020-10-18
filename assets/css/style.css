@@ -1,3 +1,78 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: red;
+  font-family: sans-serif;
+  background: linear-gradient(
+    124deg,
+    #2b1de8,
+    #dd00f3,
+    #e81d1d,
+    #e8b71d,
+    #1de840,
+    #3498db,
+    #3498db
+  );
+  background-size: 120% 120%;
+}
+
+/* From: https://github.com/pages-themes/cayman/blob/1bcabf8e4c139d46ebe0678998059db53f670caf/_sass/jekyll-theme-cayman.scss#L37-L53 */
+#skip-to-content {
+  height: 1px;
+  width: 1px;
+  position: absolute;
+  overflow: hidden;
+  top: -10px;
+}
+
+#skip-to-content:focus {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  height: auto;
+  width: auto;
+  background: black;
+  outline: thick solid black;
+}
+
+.page-header {
+  text-align: center;
+  color: white;
+  height: 128px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.project-name {
+  margin-top: 0;
+}
+
+.project-tagline {
+  margin: 0;
+}
+
+main {
+  min-height: calc(100vh - 128px - 48px);
+  color: black;
+  margin-bottom: 48px;
+}
+
+.main-content {
+  max-width: 960px;
+  margin: auto;
+  background: white;
+  padding: 24px;
+  margin-bottom: 48px;
+  border-radius: 4px;
+}
+
+a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
