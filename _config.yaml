@@ -21,8 +21,8 @@ defaults:
       layout: page
       comments: false
 
-plugins:
-  - jekyll-github-metadata
+# plugins:
+#   - jekyll-github-metadata
 
 exclude:
   - vendor/bundle
