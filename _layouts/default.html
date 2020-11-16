@@ -10,6 +10,10 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
+    <meta
+      name="description"
+      content="{{ page.description | default: site.description | default: site.github.project_tagline }}"
+    />
     <title>
       {{ default: site.title | default: site.github.repository_name }}
     </title>
