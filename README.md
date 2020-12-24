@@ -17,8 +17,12 @@ andersdjohnson:
   google_analytics: "G-123456789"
   # Show badges for npm
   npm_name: fetch-paginate
+  # Should install as dev dependency.
+  npm_dev: true
   # Show a badge for Travis CI
   travis: true
+  # Show a badge for a GitHub Actions workflow
+  workflow: "push-main"
 ```
 
 ## Development
