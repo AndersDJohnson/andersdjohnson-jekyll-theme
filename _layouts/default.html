@@ -85,6 +85,9 @@
             <a href="https://www.npmjs.com/package/{{ site.andersdjohnson.npm_name }}"><img alt="npm" src="https://img.shields.io/npm/v/{{ site.andersdjohnson.npm_name }}"></a>
             <a href="https://www.npmjs.com/package/{{ site.andersdjohnson.npm_name }}"><img alt="npm" src="https://img.shields.io/npm/dw/{{ site.andersdjohnson.npm_name }}"></a>
             <img alt="David" src="https://img.shields.io/david/{{ site.github.owner_name }}/{{ site.github.repository_name }}">
+            {% if site.andersdjohnson.workflow %}
+              <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/{{ site.github.owner_name }}/{{ site.github.repository_name }}/{{ site.andersdjohnson.workflow }}">
+            {% endif %}
             {% if site.andersdjohnson.travis %}
               <img alt="Travis (.org)" src="https://img.shields.io/travis/{{ site.github.owner_name }}/{{ site.github.repository_name }}">
             {% endif %}
@@ -92,6 +95,9 @@
             <a href="https://copyhaste.com/c?t=npm+add+{{ site.andersdjohnson.npm_name }}" title="npm add {{ site.andersdjohnson.npm_name }} (copy)"><img src="https://img.shields.io/static/v1?label=npm%20add%20{{ site.andersdjohnson.npm_name }}&message=copy&color=brightgreen" alt="npm add {{ site.andersdjohnson.npm_name }} (copy)"/></a>
             <a href="https://copyhaste.com/c?t=yarn+add+{{ site.andersdjohnson.npm_name }}" title="yarn add {{ site.andersdjohnson.npm_name }} (copy)"><img src="https://img.shields.io/static/v1?label=yarn%20add%20{{ site.andersdjohnson.npm_name }}&message=copy&color=brightgreen" alt="yarn add {{ site.andersdjohnson.npm_name }} (copy)"/></a>
           {% else %}
+            {% if site.andersdjohnson.workflow %}
+              <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/{{ site.github.owner_name }}/{{ site.github.repository_name }}/{{ site.andersdjohnson.workflow }}">
+            {% endif %}
             {% if site.andersdjohnson.travis %}
               <img alt="Travis (.org)" src="https://img.shields.io/travis/{{ site.github.owner_name }}/{{ site.github.repository_name }}">
             {% endif %}
