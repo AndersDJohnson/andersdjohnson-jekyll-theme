@@ -12,7 +12,13 @@ In `_config.yml`:
 remote_theme: AndersDJohnson/andersdjohnson-jekyll-theme
 
 # Optional
-google_analytics: "G-123456789"
+andersdjohnson:
+  # Use Google Analytics ID
+  google_analytics: "G-123456789"
+  # Show badges for npm
+  npm_name: fetch-paginate
+  # Show a badge for Travis CI
+  travis: true
 ```
 
 ## Development

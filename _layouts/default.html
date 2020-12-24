@@ -21,7 +21,7 @@
     {% if site.google_analytics %}
     <script
       async
-      src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"
+      src="https://www.googletagmanager.com/gtag/js?id={{ site.andersdjohnson.google_analytics | default: site.google_analytics }}"
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -29,7 +29,7 @@
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-      gtag("config", "{{ site.google_analytics }}");
+      gtag("config", "{{ site.andersdjohnson.google_analytics | default: site.google_analytics }}");
     </script>
     {% endif %}
 
@@ -75,6 +75,28 @@
 
     <div class="body">
       <main id="content" class="main-content" role="main">
+        <div class="badges">
+          <a href="https://github.com/{{ site.github.owner_name }}/{{ site.github.repository_name }}"><img alt="GitHub stars" src="https://img.shields.io/github/stars/{{ site.github.owner_name }}/{{ site.github.repository_name }}?style=social"></a>
+          <a href="https://github.com/{{ site.github.owner_name }}/{{ site.github.repository_name }}"><img alt="GitHub watchers" src="https://img.shields.io/github/watchers/{{ site.github.owner_name }}/{{ site.github.repository_name }}?style=social"></a>
+          <a href="https://github.com/{{ site.github.owner_name }}"><img alt="GitHub followers" src="https://img.shields.io/github/followers/{{ site.github.owner_name }}?style=social"></a>
+          <br />
+          {% if site.andersdjohnson.npm_name %}
+            <a href="https://www.npmjs.com/package/{{ site.andersdjohnson.npm_name }}"><img alt="npm" src="https://img.shields.io/npm/v/{{ site.andersdjohnson.npm_name }}"></a>
+            <a href="https://www.npmjs.com/package/{{ site.andersdjohnson.npm_name }}"><img alt="npm" src="https://img.shields.io/npm/dw/{{ site.andersdjohnson.npm_name }}"></a>
+            <img alt="David" src="https://img.shields.io/david/{{ site.github.owner_name }}/{{ site.github.repository_name }}">
+            {% if site.andersdjohnson.travis %}
+              <img alt="Travis (.org)" src="https://img.shields.io/travis/{{ site.github.owner_name }}/{{ site.github.repository_name }}">
+            {% endif %}
+            <br />
+            <a href="https://copyhaste.com/c?t=npm+add+{{ site.andersdjohnson.npm_name }}" title="npm add {{ site.andersdjohnson.npm_name }} (copy)"><img src="https://img.shields.io/static/v1?label=npm%20add%20{{ site.andersdjohnson.npm_name }}&message=copy&color=brightgreen" alt="npm add {{ site.andersdjohnson.npm_name }} (copy)"/></a>
+            <a href="https://copyhaste.com/c?t=yarn+add+{{ site.andersdjohnson.npm_name }}" title="yarn add {{ site.andersdjohnson.npm_name }} (copy)"><img src="https://img.shields.io/static/v1?label=yarn%20add%20{{ site.andersdjohnson.npm_name }}&message=copy&color=brightgreen" alt="yarn add {{ site.andersdjohnson.npm_name }} (copy)"/></a>
+          {% else %}
+            {% if site.andersdjohnson.travis %}
+              <img alt="Travis (.org)" src="https://img.shields.io/travis/{{ site.github.owner_name }}/{{ site.github.repository_name }}">
+            {% endif %}
+          {% endif %}
+        </div>
+        <br />
         <div class="markdown-body">
           {{ content }}
 
@@ -83,7 +105,6 @@
         </div>
 
         <footer class="site-footer">
-          {% if site.github.is_project_page %}
           <span class="site-footer-owner"
             ><a href="{{ site.github.repository_url }}"
               >{{ site.github.repository_name }}</a
@@ -93,7 +114,6 @@
               >{{ site.github.owner_name }}</a
             >.</span
           >
-          {% endif %}
         </footer>
       </main>
     </div>
