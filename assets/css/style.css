@@ -80,6 +80,100 @@ body {
   background: white;
 }
 
+.install-widget {
+  margin-top: 1rem;
+}
+
+.install-manager-select {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.install-manager-select legend {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.install-manager-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.install-manager-tab {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  color: #0366d6;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.install-manager-input:checked + .install-manager-tab {
+  color: black;
+  border-bottom-color: #0366d6;
+}
+
+.install-manager-input:focus-visible + .install-manager-tab {
+  outline: 2px solid #0366d6;
+  outline-offset: 2px;
+}
+
+.install-command {
+  display: none;
+  position: relative;
+  margin: 0;
+  padding: 1rem 3.5rem 1rem 1rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  color: #24292e;
+  background: #f6f8fa;
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+}
+
+.install-command code {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 85%;
+}
+
+#install-npm:checked ~ .install-command-npm,
+#install-pnpm:checked ~ .install-command-pnpm,
+#install-yarn:checked ~ .install-command-yarn {
+  display: block;
+}
+
+.install-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  color: #586069;
+  font-size: 1.1rem;
+  line-height: 1;
+  background: white;
+  border: 1px solid #d1d5da;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.install-copy:hover {
+  color: #24292e;
+  background: #f6f8fa;
+}
+
+.install-copy.is-copied,
+.install-copy.is-copied:hover {
+  color: #22863a;
+}
+
+.install-copy:focus-visible {
+  outline: 2px solid #0366d6;
+  outline-offset: 2px;
+}
+
 a {
   color: #0366d6;
   text-decoration: none;
