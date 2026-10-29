@@ -102,17 +102,17 @@
         </div>
         {% if site.andersdjohnson.npm_name %}
           <div class="install-widget">
-            <fieldset class="install-manager-select">
-              <legend>Install with</legend>
+            <fieldset class="install-manager-select markdown-body">
+              <legend>Install with:</legend>
               <input class="install-manager-input" type="radio" id="install-npm" name="install-manager" value="npm" checked />
               <label class="install-manager-tab" for="install-npm">npm</label>
               <input class="install-manager-input" type="radio" id="install-pnpm" name="install-manager" value="pnpm" />
               <label class="install-manager-tab" for="install-pnpm">pnpm</label>
               <input class="install-manager-input" type="radio" id="install-yarn" name="install-manager" value="yarn" />
               <label class="install-manager-tab" for="install-yarn">yarn</label>
-              <pre class="install-command install-command-npm"><code>npm install {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy npm install command" data-copy="npm install {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
-              <pre class="install-command install-command-pnpm"><code>pnpm add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy pnpm install command" data-copy="pnpm add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
-              <pre class="install-command install-command-yarn"><code>yarn add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy yarn install command" data-copy="yarn add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
+              <pre class="install-command install-command-npm highlight language-sh"><code class="language-sh">npm install {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy npm install command" data-copy="npm install {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
+              <pre class="install-command install-command-pnpm highlight language-sh"><code class="language-sh">pnpm add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy pnpm install command" data-copy="pnpm add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
+              <pre class="install-command install-command-yarn highlight language-sh"><code class="language-sh">yarn add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy yarn install command" data-copy="yarn add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
               <span class="install-status" role="status" aria-live="polite"></span>
             </fieldset>
           </div>
@@ -183,7 +183,10 @@ SOFTWARE.
           try {
             if (!navigator.clipboard) throw new Error();
             await navigator.clipboard.writeText(button.dataset.copy);
-            status.textContent = "Copied install command to clipboard.";
+            button.textContent = "✓";
+            button.classList.add("is-copied");
+            button.setAttribute("aria-label", "Copied install command");
+            status.textContent = "";
           } catch (error) {
             status.textContent = "Unable to copy install command.";
           }

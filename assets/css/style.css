@@ -164,6 +164,11 @@ body {
   background: #f6f8fa;
 }
 
+.install-copy.is-copied,
+.install-copy.is-copied:hover {
+  color: #22863a;
+}
+
 .install-copy:focus-visible {
   outline: 2px solid #0366d6;
   outline-offset: 2px;
