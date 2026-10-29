@@ -100,6 +100,23 @@
             {% endif %}
           {% endif %}
         </div>
+        {% if site.andersdjohnson.npm_name %}
+          <div class="install-widget">
+            <fieldset class="install-manager-select">
+              <legend>Install with</legend>
+              <input class="install-manager-input" type="radio" id="install-npm" name="install-manager" value="npm" checked />
+              <label class="install-manager-tab" for="install-npm">npm</label>
+              <input class="install-manager-input" type="radio" id="install-pnpm" name="install-manager" value="pnpm" />
+              <label class="install-manager-tab" for="install-pnpm">pnpm</label>
+              <input class="install-manager-input" type="radio" id="install-yarn" name="install-manager" value="yarn" />
+              <label class="install-manager-tab" for="install-yarn">yarn</label>
+              <pre class="install-command install-command-npm"><code>npm install {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy npm install command" data-copy="npm install {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
+              <pre class="install-command install-command-pnpm"><code>pnpm add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy pnpm install command" data-copy="pnpm add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
+              <pre class="install-command install-command-yarn"><code>yarn add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}</code><button class="install-copy" type="button" aria-label="Copy yarn install command" data-copy="yarn add {% if site.andersdjohnson.npm_dev == true %}--dev {% endif %}{{ site.andersdjohnson.npm_name | escape }}">⧉</button></pre>
+              <span class="install-status" role="status" aria-live="polite"></span>
+            </fieldset>
+          </div>
+        {% endif %}
         <br />
         <div class="markdown-body">
           {{ content }}
@@ -155,5 +172,24 @@ SOFTWARE.
     <script>
       anchors.add('#content h2, #content h3, #content h4, #content h5, #content h6');
     </script>
+    {% if site.andersdjohnson.npm_name %}
+    <script>
+      document.querySelectorAll(".install-widget").forEach(function (widget) {
+        widget.addEventListener("click", async function (event) {
+          const button = event.target.closest(".install-copy");
+          if (!button) return;
+
+          const status = widget.querySelector(".install-status");
+          try {
+            if (!navigator.clipboard) throw new Error();
+            await navigator.clipboard.writeText(button.dataset.copy);
+            status.textContent = "Copied install command to clipboard.";
+          } catch (error) {
+            status.textContent = "Unable to copy install command.";
+          }
+        });
+      });
+    </script>
+    {% endif %}
   </body>
 </html>
