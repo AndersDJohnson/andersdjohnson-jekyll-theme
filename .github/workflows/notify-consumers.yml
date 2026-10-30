@@ -8,23 +8,41 @@ on:
 env:
   # Owner of the consumer repositories listed in _sites.yml.
   CONSUMER_OWNER: ${{ github.repository_owner }}
-  # Event type sent as a repository_dispatch to each consumer.
-  EVENT_TYPE: theme-updated
+  # Branch opened as a pull request against each consumer.
+  BRANCH: theme-update
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Trigger rebuild in each consumer
+      - name: Open a PR with an empty commit in each consumer
         env:
-          # Personal access token (or app token) with write access to consumer repos.
+          # Personal access token (or app token) with contents and pull requests write access to consumer repos.
           GH_TOKEN: ${{ secrets.CONSUMERS_TOKEN }}
         run: |
           for site in $(yq '.sites[]' _sites.yml); do
-            echo "Dispatching $EVENT_TYPE to $CONSUMER_OWNER/$site"
-            gh api "repos/$CONSUMER_OWNER/$site/dispatches" \
-              -f event_type="$EVENT_TYPE" \
-              -f "client_payload[sha]=$GITHUB_SHA" \
-              || echo "::warning::Failed to notify $site"
+            repo="$CONSUMER_OWNER/$site"
+            echo "Opening theme update PR in $repo"
+            (
+              set -e
+              base_branch=$(gh api "repos/$repo" --jq .default_branch)
+              base_sha=$(gh api "repos/$repo/git/ref/heads/$base_branch" --jq .object.sha)
+              tree_sha=$(gh api "repos/$repo/git/commits/$base_sha" --jq .tree.sha)
+              # Empty commit: same tree as the base commit.
+              commit_sha=$(gh api "repos/$repo/git/commits" \
+                -f message="chore: rebuild for theme update ($GITHUB_SHA)" \
+                -f tree="$tree_sha" \
+                -f "parents[]=$base_sha" --jq .sha)
+              if ! gh api "repos/$repo/git/refs" \
+                -f ref="refs/heads/$BRANCH" -f sha="$commit_sha" > /dev/null 2>&1; then
+                gh api -X PATCH "repos/$repo/git/refs/heads/$BRANCH" \
+                  -f sha="$commit_sha" -F force=true > /dev/null
+              fi
+              if [ -z "$(gh pr list -R "$repo" --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+                gh pr create -R "$repo" --head "$BRANCH" --base "$base_branch" \
+                  --title "chore: rebuild for theme update" \
+                  --body "Empty commit to trigger a GitHub Pages rebuild after theme commit $GITHUB_REPOSITORY@$GITHUB_SHA."
+              fi
+            ) || echo "::warning::Failed to open PR for $site"
           done

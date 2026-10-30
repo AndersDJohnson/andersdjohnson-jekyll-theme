@@ -49,4 +49,4 @@ bundle exec jekyll serve
 
 ## Notifying consumers
 
-On each push to `master`, the `Notify consumers` workflow sends a `repository_dispatch` event (`theme-updated`) to every repository listed in `_sites.yml`. Add a `CONSUMERS_TOKEN` secret (a token with write access to those repositories), and have each consumer run its build/update on `repository_dispatch` with that event type.
+On each push to `master`, the `Notify consumers` workflow opens a pull request (branch `theme-update`) containing an empty commit in every repository listed in `_sites.yml`, so their GitHub Pages sites rebuild with the latest theme once merged. If a PR is already open, its branch is updated instead. Add a `CONSUMERS_TOKEN` secret: a token with contents and pull requests write access to those repositories.
