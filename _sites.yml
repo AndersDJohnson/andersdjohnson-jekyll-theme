@@ -3,3 +3,4 @@ sites:
   - use-yarn
   - anchorate
   - fetch-paginate
+  - msw-expect
