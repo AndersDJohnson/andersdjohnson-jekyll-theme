@@ -1,0 +1,63 @@
+name: Update sites
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  # Owner whose repositories are searched for sites using this theme.
+  CONSUMER_OWNER: ${{ github.repository_owner }}
+  # Branch opened as a pull request against each consumer.
+  BRANCH: theme-update
+  # Value of remote_theme identifying sites that use this theme.
+  REMOTE_THEME: ${{ github.repository }}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open a PR with an empty commit in each consumer
+        env:
+          # Personal access token (or app token) with contents and pull requests write access to consumer repos.
+          GH_TOKEN: ${{ secrets.CONSUMERS_TOKEN }}
+        run: |
+          # Find repos with a YAML file setting remote_theme to this theme.
+          sites=$(
+            gh api -X GET search/code \
+              -f q="remote_theme $REMOTE_THEME user:$CONSUMER_OWNER language:yaml" \
+              -F per_page=100 --jq '.items[] | [.repository.full_name, .path] | @tsv' \
+            | while IFS=$'\t' read -r full_name path; do
+              [ "$full_name" = "$GITHUB_REPOSITORY" ] && continue
+              if gh api "repos/$full_name/contents/$path" -H "Accept: application/vnd.github.raw" \
+                | grep -Eq "^[[:space:]]*remote_theme:[[:space:]]*['\"]?$REMOTE_THEME(@[^'\"[:space:]]*)?['\"]?[[:space:]]*(#.*)?$"; then
+                echo "${full_name#*/}"
+              fi
+            done | sort -u
+          )
+          echo "Sites found: $sites"
+          for site in $sites; do
+            repo="$CONSUMER_OWNER/$site"
+            echo "Opening theme update PR in $repo"
+            (
+              set -e
+              base_branch=$(gh api "repos/$repo" --jq .default_branch)
+              base_sha=$(gh api "repos/$repo/git/ref/heads/$base_branch" --jq .object.sha)
+              tree_sha=$(gh api "repos/$repo/git/commits/$base_sha" --jq .tree.sha)
+              # Empty commit: same tree as the base commit.
+              commit_sha=$(gh api "repos/$repo/git/commits" \
+                -f message="chore: rebuild for theme update ($GITHUB_SHA)" \
+                -f tree="$tree_sha" \
+                -f "parents[]=$base_sha" --jq .sha)
+              if ! gh api "repos/$repo/git/refs" \
+                -f ref="refs/heads/$BRANCH" -f sha="$commit_sha" > /dev/null 2>&1; then
+                gh api -X PATCH "repos/$repo/git/refs/heads/$BRANCH" \
+                  -f sha="$commit_sha" -F force=true > /dev/null
+              fi
+              if [ -z "$(gh pr list -R "$repo" --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+                gh pr create -R "$repo" --head "$BRANCH" --base "$base_branch" \
+                  --title "chore: rebuild for theme update" \
+                  --body "Empty commit to trigger a GitHub Pages rebuild after theme commit $GITHUB_REPOSITORY@$GITHUB_SHA."
+              fi
+            ) || echo "::warning::Failed to open PR for $site"
+          done
