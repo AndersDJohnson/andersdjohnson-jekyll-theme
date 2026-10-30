@@ -46,3 +46,7 @@ To start the local site:
 ```sh
 bundle exec jekyll serve
 ```
+
+## Notifying consumers
+
+On each push to `master`, the `Notify consumers` workflow sends a `repository_dispatch` event (`theme-updated`) to every repository listed in `_sites.yml`. Add a `CONSUMERS_TOKEN` secret (a token with write access to those repositories), and have each consumer run its build/update on `repository_dispatch` with that event type.
