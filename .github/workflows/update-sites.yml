@@ -24,11 +24,10 @@ jobs:
         run: |
           # Find repos with a YAML file setting remote_theme to this theme.
           sites=$(
-            for ext in yml yaml; do
-              gh api -X GET search/code \
-                -f q="remote_theme $REMOTE_THEME user:$CONSUMER_OWNER extension:$ext" \
-                -F per_page=100 --jq '.items[] | [.repository.full_name, .path] | @tsv'
-            done | while IFS=$'\t' read -r full_name path; do
+            gh api -X GET search/code \
+              -f q="remote_theme $REMOTE_THEME user:$CONSUMER_OWNER language:yaml" \
+              -F per_page=100 --jq '.items[] | [.repository.full_name, .path] | @tsv' \
+            | while IFS=$'\t' read -r full_name path; do
               [ "$full_name" = "$GITHUB_REPOSITORY" ] && continue
               if gh api "repos/$full_name/contents/$path" -H "Accept: application/vnd.github.raw" \
                 | grep -Eq "^[[:space:]]*remote_theme:[[:space:]]*['\"]?$REMOTE_THEME(@[^'\"[:space:]]*)?['\"]?[[:space:]]*(#.*)?$"; then
