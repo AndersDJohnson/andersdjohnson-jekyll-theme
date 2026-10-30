@@ -1,4 +1,4 @@
-name: Notify consumers
+name: Update sites
 
 on:
   push:
@@ -6,22 +6,38 @@ on:
   workflow_dispatch:
 
 env:
-  # Owner of the consumer repositories listed in _sites.yml.
+  # Owner whose repositories are searched for sites using this theme.
   CONSUMER_OWNER: ${{ github.repository_owner }}
   # Branch opened as a pull request against each consumer.
   BRANCH: theme-update
+  # Value of remote_theme identifying sites that use this theme.
+  REMOTE_THEME: ${{ github.repository }}
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Open a PR with an empty commit in each consumer
         env:
           # Personal access token (or app token) with contents and pull requests write access to consumer repos.
           GH_TOKEN: ${{ secrets.CONSUMERS_TOKEN }}
         run: |
-          for site in $(yq '.sites[]' _sites.yml); do
+          # Find repos with a YAML file setting remote_theme to this theme.
+          sites=$(
+            for ext in yml yaml; do
+              gh api -X GET search/code \
+                -f q="remote_theme $REMOTE_THEME user:$CONSUMER_OWNER extension:$ext" \
+                -F per_page=100 --jq '.items[] | [.repository.full_name, .path] | @tsv'
+            done | while IFS=$'\t' read -r full_name path; do
+              [ "$full_name" = "$GITHUB_REPOSITORY" ] && continue
+              if gh api "repos/$full_name/contents/$path" -H "Accept: application/vnd.github.raw" \
+                | grep -Eq "^[[:space:]]*remote_theme:[[:space:]]*['\"]?$REMOTE_THEME(@[^'\"[:space:]]*)?['\"]?[[:space:]]*(#.*)?$"; then
+                echo "${full_name#*/}"
+              fi
+            done | sort -u
+          )
+          echo "Sites found: $sites"
+          for site in $sites; do
             repo="$CONSUMER_OWNER/$site"
             echo "Opening theme update PR in $repo"
             (

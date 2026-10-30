@@ -47,6 +47,6 @@ To start the local site:
 bundle exec jekyll serve
 ```
 
-## Notifying consumers
+## Updating sites
 
-On each push to `master`, the `Notify consumers` workflow opens a pull request (branch `theme-update`) containing an empty commit in every repository listed in `_sites.yml`, so their GitHub Pages sites rebuild with the latest theme once merged. If a PR is already open, its branch is updated instead. Add a `CONSUMERS_TOKEN` secret: a token with contents and pull requests write access to those repositories.
+On each push to `master`, the `Update sites` workflow searches the owner's repositories for YAML files (such as `_config.yml`) with `remote_theme: AndersDJohnson/andersdjohnson-jekyll-theme`. In each one it opens a pull request (branch `theme-update`) containing an empty commit, so the GitHub Pages site rebuilds with the latest theme once merged. If a PR is already open, its branch is updated instead. Add a `CONSUMERS_TOKEN` secret: a token with read and write access to contents and pull requests on those repositories. Code search only covers indexed default-branch files.
