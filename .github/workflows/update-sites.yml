@@ -5,6 +5,9 @@ on:
     branches: [master]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   # Owner whose repositories are searched for sites using this theme.
   CONSUMER_OWNER: ${{ github.repository_owner }}
